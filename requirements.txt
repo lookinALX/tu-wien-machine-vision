@@ -1,0 +1,13 @@
+# Alternative to mv_environment.yml: install in a Python 3.12 venv.
+# Student GUI environment: do not substitute opencv-python-headless.
+# Direct dependencies, not a fully pinned/tested cross-platform lock file.
+# Exercise 3 uses its separate PyTorch/notebook environment (see its assignment).
+numpy
+scipy
+matplotlib
+scikit-learn
+opencv-python
+Pillow
+pyquaternion
+# Open3D <=0.18 is incompatible with NumPy 2.
+open3d>=0.19

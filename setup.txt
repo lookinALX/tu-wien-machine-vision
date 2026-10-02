@@ -1,0 +1,12 @@
+cd /path/to/your/project
+
+pyenv local 3.12
+
+python --version
+
+python -m venv .venv
+source .venv/bin/activate
+
+python --version
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
