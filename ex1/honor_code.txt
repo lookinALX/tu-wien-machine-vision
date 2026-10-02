@@ -1,0 +1,6 @@
+For the assignment I followed the honor code:
+- Rule 1: Don't look at solutions or code of other students. Everything you submit should be your own work.
+- Rule 2: Don't share your solution code with others; however, discussing ideas or general strategies is fine and encouraged.
+- Rule 3: Cite the source of any external code directly in your code (e.g., StackOverflow). For generative AI tools (e.g., ChatGPT), link to the specific chat. Do not use tools, including coding agents, whose contributions you cannot document and reference.
+
+I know that I have full responsibility for what I submit. I made sure the assignment allows the teaching staff to evaluate which competences I have acquired. I am aware that plagiarism is prohibited and may lead to failure of this course.
