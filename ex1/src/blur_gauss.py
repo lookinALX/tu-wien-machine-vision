@@ -10,7 +10,10 @@ MatrNr: FILL IN
 import cv2
 import numpy as np
 
-def blur_gauss(img: np.array, sigma: float) -> np.array:
+def _gauss(x: int, y: int, sigma: float) -> float:
+        return (1/(2*np.pi*sigma**2) * np.exp(-1*(x**2 + y**2)/(2 * sigma ** 2)))
+
+def blur_gauss(img: np.array, sigma: float, is_constant_size = False) -> np.array:
     """ Blur the input image with a Gaussian filter with standard deviation of sigma.
 
     Construct a two-dimensional Gaussian kernel with standard deviation sigma and
@@ -29,19 +32,20 @@ def blur_gauss(img: np.array, sigma: float) -> np.array:
     """
     ######################################################
     # Write your own code here
-    def gauss(x: int, y: int, sigma: float) -> float:
-            return (1/(2*np.pi*sigma**2) * np.exp(-1*(x**2 + y**2)/(2 * sigma ** 2)))
-    
     size = int(2 * np.ceil(3 * sigma) + 1)
-    filter = np.empty((size, size))
+    filter = None
+    if is_constant_size:
+        filter = np.empty((25,25))
+    else:
+        filter = np.empty((size, size))
 
     sum = 0
     center = (size - 1) / 2 
     for idx in np.ndindex(filter.shape):
-          x = idx[0] - center
-          y = idx[1] - center
-          filter[idx] = gauss(x, y, sigma)
-          sum += filter[idx]
+        x = idx[0] - center
+        y = idx[1] - center
+        filter[idx] = _gauss(x, y, sigma)
+        sum += filter[idx]
 
     filter /= sum
 
@@ -49,3 +53,47 @@ def blur_gauss(img: np.array, sigma: float) -> np.array:
 
     ######################################################
     return img_blur
+
+
+if __name__ == "__main__":
+    from helper_functions import *
+    from pathlib import Path
+
+    current_path = Path(__file__).parent
+    img_gray = cv2.imread(str(current_path.joinpath("image/beardman.jpg")), cv2.IMREAD_GRAYSCALE)
+
+    img_gray = img_gray.astype(np.float32) / 255.
+    show_image(img_gray, "Original Image", save_image=False, use_matplotlib=False)
+    """
+    sigma = 3 
+    img_blur = blur_gauss(img_gray, sigma)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+
+    sigma = 10 
+    img_blur = blur_gauss(img_gray, sigma)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+
+    sigma = 100 
+    img_blur = blur_gauss(img_gray, sigma)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+    
+
+    #blur with constant kernal size and varian sigma
+    
+    sigma = 3 
+    img_blur = blur_gauss(img_gray, sigma, is_constant_size=True)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+
+    sigma = 10 
+    img_blur = blur_gauss(img_gray, sigma, is_constant_size=True)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+
+    sigma = 100 
+    img_blur = blur_gauss(img_gray, sigma, is_constant_size=True)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+    """
+    sigma = 3 
+    img_blur = blur_gauss(img_gray, sigma)
+
+    plot_row_intensities(img_gray, 10)
+    plot_row_intensities(img_blur, 10)

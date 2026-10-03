@@ -42,7 +42,7 @@ def sobel(img: np.array) -> (np.array, np.array):
     orientation = np.atan2(gY, gX)
     gradient = np.sqrt(gX**2 + gY**2)
     if np.max(gradient) != 0:
-        gradient /= np.max(gradient)
+        gradient /= np.amax(gradient)
 
     ######################################################
     return gradient, orientation

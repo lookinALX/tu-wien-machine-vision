@@ -37,3 +37,27 @@ def non_max(gradients: np.array, orientations: np.array) -> np.array:
     ######################################################
 
     return edges
+
+
+if __name__ == "__main__":
+    from helper_functions import *
+    from pathlib import Path
+    from blur_gauss import blur_gauss
+    from sobel import sobel
+    
+    current_path = Path(__file__).parent
+    img_gray = cv2.imread(str(current_path.joinpath("image/circle.jpg")), cv2.IMREAD_GRAYSCALE)
+
+    img_gray = img_gray.astype(np.float32) / 255.
+   
+    sigma = 3  # Change this value
+    img_blur = blur_gauss(img_gray, sigma)
+  
+    gradients, orientations = sobel(img_blur)
+
+    # masking test
+    eps = 0.5
+    mask = (np.abs(orientations) < eps) | (np.abs(np.abs(orientations) - np.pi) < eps)
+    vertical_edges = np.where(mask, gradients, 0)
+    print(vertical_edges)
+    show_image(vertical_edges, "Gradients", save_image=False, use_matplotlib=False)
