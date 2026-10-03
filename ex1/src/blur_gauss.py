@@ -29,9 +29,23 @@ def blur_gauss(img: np.array, sigma: float) -> np.array:
     """
     ######################################################
     # Write your own code here
-    img_blur = img.copy()  # Replace this line
+    def gauss(x: int, y: int, sigma: float) -> float:
+            return (1/(2*np.pi*sigma**2) * np.exp(-1*(x**2 + y**2)/(2 * sigma ** 2)))
+    
+    size = int(2 * np.ceil(3 * sigma) + 1)
+    filter = np.empty((size, size))
 
+    sum = 0
+    center = (size - 1) / 2 
+    for idx in np.ndindex(filter.shape):
+          x = idx[0] - center
+          y = idx[1] - center
+          filter[idx] = gauss(x, y, sigma)
+          sum += filter[idx]
 
+    filter /= sum
+
+    img_blur = cv2.filter2D(img, ddepth = -1, kernel=filter)
 
     ######################################################
     return img_blur

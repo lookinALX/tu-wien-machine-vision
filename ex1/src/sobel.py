@@ -25,10 +25,50 @@ def sobel(img: np.array) -> (np.array, np.array):
     """
     ######################################################
     # Write your own code here
-    gradient = img.copy()     # Replace this line
-    orientation = img.copy()  # Replace this line
+    sobel_x = np.array([
+        (-1, 0, 1), 
+        (-2, 0, 2), 
+        (-1, 0, 1)
+    ])
+    sobel_y = np.array([
+        (-1, -2, -1), 
+        (0, 0, 0), 
+        (1, 2, 1)
+    ])
 
+    gX = cv2.filter2D(img, ddepth=-1, kernel=sobel_x)
+    gY = cv2.filter2D(img, ddepth=-1, kernel=sobel_y)
 
+    orientation = np.atan2(gY, gX)
+    gradient = np.sqrt(gX**2 + gY**2)
+    if np.max(gradient) != 0:
+        gradient /= np.max(gradient)
 
     ######################################################
     return gradient, orientation
+
+
+
+if __name__ == "__main__":
+    from helper_functions import *
+    from pathlib import Path
+    from blur_gauss import blur_gauss
+
+    current_path = Path(__file__).parent
+    img_gray = cv2.imread(str(current_path.joinpath("image/circle.jpg")), cv2.IMREAD_GRAYSCALE)
+
+    img_gray = img_gray.astype(np.float32) / 255.
+    show_image(img_gray, "Original Image", save_image=False, use_matplotlib=False)
+    
+    sigma = 3  # Change this value
+    img_blur = blur_gauss(img_gray, sigma)
+    show_image(img_blur, "Blurred Image", save_image=False, use_matplotlib=False)
+
+    gradients, orientations = sobel(img_blur)
+    orientations_color = cv2.applyColorMap(np.uint8((orientations.copy() + np.pi) / (2 * np.pi) * 255),
+                                               cv2.COLORMAP_RAINBOW)
+    orientations_color = orientations_color.astype(np.float32) / 255.
+    gradient_img = np.append(cv2.cvtColor(gradients, cv2.COLOR_GRAY2BGR), orientations_color, axis=1)
+    show_image(gradient_img, "Gradients", save_image=False, use_matplotlib=False)
+    
+    
